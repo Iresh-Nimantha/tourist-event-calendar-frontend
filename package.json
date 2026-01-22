@@ -25,6 +25,7 @@
     "dotenv": "^17.2.3",
     "framer-motion": "^12.27.5",
     "lucide-react": "^0.562.0",
+    "path-browserify": "^1.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",

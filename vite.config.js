@@ -14,4 +14,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      external: ["dotenv"],
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "axios"],
+          calendar: ["@fullcalendar/core", "@fullcalendar/react"],
+        },
+      },
+    },
+  },
 });
