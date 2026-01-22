@@ -5,6 +5,7 @@ import EventCard from "../components/EventCard";
 import EventHotelDetailsModal from "../components/EventHotelDetailsModal";
 import { eventsApi } from "../services/api";
 import Footer from "@/components/Footer";
+import ChatBot from "@/components/ChatBot";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -199,6 +200,7 @@ const Home = () => {
       />
 
       <Footer />
+      <ChatBot />
     </div>
   );
 };
