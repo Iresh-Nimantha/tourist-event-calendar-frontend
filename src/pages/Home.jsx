@@ -161,7 +161,8 @@ const Home = () => {
               <Calendar className="w-5 h-5 text-blue-600" />
               Event Calendar
             </h2>
-            <CalendarView />
+            {/* <CalendarView /> */}
+            <CalendarView onEventClick={handleEventDetails} />
           </section>
 
           {/* EVENTS SIDEBAR */}

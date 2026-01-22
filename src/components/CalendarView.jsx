@@ -4,14 +4,14 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { X, MapPin, Clock, DollarSign } from "lucide-react";
 import { eventsApi } from "@/services/api";
-import EventHotelDetailsModal from "./EventHotelDetailsModal";
+// import EventHotelDetailsModal from "./EventHotelDetailsModal";
 
-const CalendarView = () => {
+const CalendarView = ({ onEventClick }) => {
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDateEvents, setSelectedDateEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedEventId, setSelectedEventId] = useState(null);
+  // const [selectedEventId, setSelectedEventId] = useState(null);
 
   // Fetch calendar events
   useEffect(() => {
@@ -150,12 +150,17 @@ const CalendarView = () => {
                   </div>
 
                   <button
-                    onClick={() => {
-                      console.log(
-                        "View Full Details clicked for ID:",
-                        event._id,
-                      );
-                      setSelectedEventId(event._id);
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      console.log("Calendar → View Full Details:", event._id);
+
+                      // close side panel
+                      setSelectedDate("");
+                      setSelectedDateEvents([]);
+
+                      // delegate to Home
+                      onEventClick(event._id);
                     }}
                     className="mt-4 w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium"
                   >
@@ -169,11 +174,11 @@ const CalendarView = () => {
       )}
 
       {/* Event + Hotel Modal */}
-      <EventHotelDetailsModal
+      {/* <EventHotelDetailsModal
         open={!!selectedEventId}
         onClose={() => setSelectedEventId(null)}
         eventId={selectedEventId}
-      />
+      /> */}
     </div>
   );
 };
