@@ -46,8 +46,7 @@ const Footer = () => {
 
         {/* Bottom Line */}
         <div className="mt-10 pt-6 border-t text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Sri Lanka Events Calendar. All rights
-          reserved.
+          © {new Date().getFullYear()} EventHaven. All rights reserved.
         </div>
       </div>
     </footer>

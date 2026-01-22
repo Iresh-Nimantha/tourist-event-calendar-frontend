@@ -74,7 +74,7 @@ const ChatBot = () => {
                 🤖
               </div>
               <div>
-                <h3 className="font-bold text-lg">Gamage Tours AI</h3>
+                <h3 className="font-bold text-lg">EventHaven</h3>
                 <p className="text-sm opacity-90">Hotels & Events Assistant</p>
               </div>
             </div>
@@ -113,7 +113,7 @@ const ChatBot = () => {
                   <div className="flex items-center gap-2 text-blue-600">
                     <div className="w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
                     <span className="font-medium">
-                      Gamage AI is thinking...
+                      EventHaven AI is thinking...
                     </span>
                   </div>
                 </div>
