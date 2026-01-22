@@ -3,15 +3,14 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { X, MapPin, Clock, DollarSign } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { eventsApi } from "@/services/api";
-// import EventHotelDetailsModal from "./EventHotelDetailsModal";
 
 const CalendarView = ({ onEventClick }) => {
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDateEvents, setSelectedDateEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-  // const [selectedEventId, setSelectedEventId] = useState(null);
 
   // Fetch calendar events
   useEffect(() => {
@@ -101,84 +100,85 @@ const CalendarView = ({ onEventClick }) => {
       </div>
 
       {/* Side Panel */}
-      {selectedDateEvents.length > 0 && (
-        <div className="fixed inset-0 bg-black/40 z-40" onClick={closePanel}>
-          <div
-            className="absolute right-0 top-0 h-full w-full max-w-xl bg-white shadow-xl overflow-y-auto transition-transform transform"
-            onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {selectedDateEvents.length > 0 && (
+          <motion.div
+            className="fixed inset-0 z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closePanel}
           >
-            {/* Header */}
-            <div className="sticky top-0 bg-blue-600 text-white p-5 flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-bold">
-                  {formatDate(selectedDate)}
-                </h3>
-                <p className="text-sm text-blue-100">
-                  {selectedDateEvents.length} event(s)
-                </p>
+            <motion.div
+              className="absolute right-0 top-0 h-full w-full max-w-xl bg-white shadow-xl overflow-y-auto"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-blue-600 text-white p-5 flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-bold">
+                    {formatDate(selectedDate)}
+                  </h3>
+                  <p className="text-sm text-blue-100">
+                    {selectedDateEvents.length} event(s)
+                  </p>
+                </div>
+                <button onClick={closePanel}>
+                  <X className="w-6 h-6" />
+                </button>
               </div>
-              <button onClick={closePanel}>
-                <X className="w-6 h-6" />
-              </button>
-            </div>
 
-            {/* Events List */}
-            <div className="p-5 space-y-4">
-              {selectedDateEvents.map((event) => (
-                <div
-                  key={event._id}
-                  className="border rounded-xl p-4 hover:shadow-md transition"
-                >
-                  <h4 className="font-semibold text-lg mb-2">{event.title}</h4>
+              {/* Events List */}
+              <div className="p-5 space-y-4">
+                {selectedDateEvents.map((event) => (
+                  <div
+                    key={event._id}
+                    className="border rounded-xl p-4 hover:shadow-md transition"
+                  >
+                    <h4 className="font-semibold text-lg mb-2">
+                      {event.title}
+                    </h4>
 
-                  {event.location?.venue && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <MapPin className="w-4 h-4" /> {event.location.venue}
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-4 mt-2 text-sm">
-                    {event.startTime && (
-                      <div className="flex items-center gap-1 text-gray-600">
-                        <Clock className="w-4 h-4" /> {event.startTime}
+                    {event.location?.venue && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <MapPin className="w-4 h-4" /> {event.location.venue}
                       </div>
                     )}
-                    <div className="flex items-center gap-1 font-semibold text-blue-600">
-                      <DollarSign className="w-4 h-4" />{" "}
-                      {event.price ? `LKR ${event.price}` : "Free"}
+
+                    <div className="flex items-center gap-4 mt-2 text-sm">
+                      {event.startTime && (
+                        <div className="flex items-center gap-1 text-gray-600">
+                          <Clock className="w-4 h-4" /> {event.startTime}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1 font-semibold text-blue-600">
+                        <DollarSign className="w-4 h-4" />{" "}
+                        {event.price ? `LKR ${event.price}` : "Free"}
+                      </div>
                     </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log("Calendar → View Full Details:", event._id);
+                        closePanel();
+                        onEventClick(event._id);
+                      }}
+                      className="mt-4 w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium"
+                    >
+                      View Full Details
+                    </button>
                   </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-
-                      console.log("Calendar → View Full Details:", event._id);
-
-                      // close side panel
-                      setSelectedDate("");
-                      setSelectedDateEvents([]);
-
-                      // delegate to Home
-                      onEventClick(event._id);
-                    }}
-                    className="mt-4 w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium"
-                  >
-                    View Full Details
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Event + Hotel Modal */}
-      {/* <EventHotelDetailsModal
-        open={!!selectedEventId}
-        onClose={() => setSelectedEventId(null)}
-        eventId={selectedEventId}
-      /> */}
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
