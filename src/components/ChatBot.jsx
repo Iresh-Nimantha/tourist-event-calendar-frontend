@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import bot from "../assets/bot.png";
 
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false); // NEW: open/close state
@@ -55,12 +56,13 @@ const ChatBot = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Chat toggle button */}
+
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center text-xl"
+          className="w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-xl float-slow"
         >
-          💬
+          <img src={bot} alt="bot png" className="rounded-full" />
         </button>
       )}
 
