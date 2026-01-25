@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { hotelApi } from "../../services/api";
 import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const HotelsList = () => {
   const [hotels, setHotels] = useState([]);
@@ -23,16 +24,39 @@ const HotelsList = () => {
     };
     fetchHotels();
   }, []);
+
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this hotel?")) return;
+    const result = await Swal.fire({
+      title: "Delete Hotel?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626", // red
+      cancelButtonColor: "#6b7280", // gray
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await hotelApi.deleteHotel(id);
       setHotels((prev) => prev.filter((hotel) => hotel._id !== id));
-      toast.success("Hotel deleted successfully");
+
+      Swal.fire({
+        title: "Deleted!",
+        text: "Hotel has been deleted successfully.",
+        icon: "success",
+        timer: 1800,
+        showConfirmButton: false,
+      });
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete hotel");
+      Swal.fire({
+        title: "Error",
+        text: "Failed to delete hotel.",
+        icon: "error",
+      });
     }
   };
 
