@@ -25,7 +25,7 @@ API_BASE = API_BASE.replace(/\/api\/?$/, "").replace(/\/$/, "");
 
 // Log API base URL in development for debugging
 if (import.meta.env.DEV) {
-  console.log("API Base URL:", API_BASE);
+  // console.log("API Base URL:", API_BASE);
 }
 
 // Create axios instance
