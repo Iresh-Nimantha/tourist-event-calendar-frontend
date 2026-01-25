@@ -23,6 +23,18 @@ const HotelsList = () => {
     };
     fetchHotels();
   }, []);
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this hotel?")) return;
+
+    try {
+      await hotelApi.deleteHotel(id);
+      setHotels((prev) => prev.filter((hotel) => hotel._id !== id));
+      toast.success("Hotel deleted successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete hotel");
+    }
+  };
 
   if (loading) {
     return (
@@ -69,16 +81,20 @@ const HotelsList = () => {
                   <td className="border px-4 py-3">
                     {hotel.location?.region || "N/A"}
                   </td>
+                  <td className="border px-4 py-3">{hotel.phone || "N/A"}</td>
                   <td className="border px-4 py-3">
-                    {hotel.phone || "N/A"}
-                  </td>
-                  <td className="border px-4 py-3">
-                <Link
-                  to={`/admin/hotels/${hotel._id}`}
-                  className="text-blue-600 hover:text-blue-800 hover:underline font-medium mr-3"
-                >
-                  Edit
-                </Link>
+                    <Link
+                      to={`/admin/hotels/${hotel._id}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline font-medium mr-3"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(hotel._id)}
+                      className="text-red-600 hover:text-red-800 hover:underline font-medium"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -15,6 +15,8 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 relative">
+        {/* ChatBubble */}
+        <ChatBubble />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/hotel/:id" element={<HotelDetail />} />
@@ -33,13 +35,13 @@ function App() {
             }
           />
           {/* Redirect /admin to /admin/dashboard */}
-          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route
+            path="/admin"
+            element={<Navigate to="/admin/dashboard" replace />}
+          />
         </Routes>
 
         <Toaster position="top-right" />
-
-        {/* ChatBubble */}
-        <ChatBubble />
       </div>
     </BrowserRouter>
   );

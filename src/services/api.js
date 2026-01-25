@@ -10,10 +10,12 @@ let API_BASE = import.meta.env.VITE_API_URL;
 // If not set, use default for development
 if (!API_BASE) {
   if (import.meta.env.DEV) {
-    API_BASE = "http://localhost:5000";
+    API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
     console.warn("VITE_API_URL not set, using default:", API_BASE);
   } else {
-    console.error("VITE_API_URL is not set. Please configure it in your environment variables.");
+    console.error(
+      "VITE_API_URL is not set. Please configure it in your environment variables.",
+    );
     API_BASE = ""; // Will cause errors, but better than wrong URL
   }
 }
@@ -51,11 +53,14 @@ api.interceptors.response.use(
   (error) => {
     // Log API errors for debugging
     if (error.config) {
-      console.error(`API Error [${error.config.method?.toUpperCase()}] ${error.config.url}:`, {
-        status: error.response?.status,
-        message: error.response?.data?.message || error.message,
-        data: error.response?.data,
-      });
+      console.error(
+        `API Error [${error.config.method?.toUpperCase()}] ${error.config.url}:`,
+        {
+          status: error.response?.status,
+          message: error.response?.data?.message || error.message,
+          data: error.response?.data,
+        },
+      );
     }
 
     if (error.response?.status === 401) {
